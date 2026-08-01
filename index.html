@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Adi Eckstein — Data Analyst / BI</title>
+<meta name="description" content="Adi Eckstein — Industrial Engineering & Management student, Data Analytics track. Real models, real SQL, honestly reported results.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#08090b; --bg2:#0e1013; --panel:#111318; --border:#22252b;
+    --text:#e8e9ec; --muted:#8b8f98; --muted2:#5c6069;
+    --accent:#5eead4; --accent2:#38bdf8; --warn:#fbbf24; --danger:#f87171; --ok:#4ade80;
+    --mono: 'JetBrains Mono', ui-monospace, Menlo, Consolas, monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--bg); color:var(--text); font-family:var(--sans);
+    line-height:1.55; -webkit-font-smoothing:antialiased;
+    background-image:
+      radial-gradient(ellipse 80% 50% at 50% -10%, rgba(94,234,212,0.08), transparent),
+      linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 100% 100%, 42px 42px, 42px 42px;
+  }
+  a{color:inherit; text-decoration:none;}
+  .wrap{max-width:1080px; margin:0 auto; padding:0 24px;}
+  code{font-family:var(--mono);}
+
+  /* NAV */
+  nav{position:sticky; top:0; z-index:50; backdrop-filter:blur(10px); background:rgba(8,9,11,0.75); border-bottom:1px solid var(--border);}
+  nav .wrap{display:flex; align-items:center; justify-content:space-between; height:64px;}
+  .logo{font-family:var(--mono); font-weight:700; font-size:15px; letter-spacing:0.5px; display:flex; align-items:center; gap:8px;}
+  .logo .dot{width:8px; height:8px; border-radius:2px; background:var(--accent); box-shadow:0 0 12px var(--accent);}
+  .navlinks{display:flex; gap:28px; font-size:14px; color:var(--muted);}
+  .navlinks a:hover{color:var(--text);}
+  .navlinks .cta{color:var(--bg); background:var(--accent); padding:8px 16px; border-radius:6px; font-weight:600;}
+  .navlinks .cta:hover{background:#7ef2df;}
+  @media (max-width:680px){ .navlinks a:not(.cta){display:none;} }
+
+  /* HERO */
+  .hero{padding:72px 0 56px;}
+  .hero-grid{display:grid; grid-template-columns:1.05fr 0.95fr; gap:48px; align-items:center;}
+  @media (max-width:900px){ .hero-grid{grid-template-columns:1fr;} }
+  .eyebrow{font-family:var(--mono); font-size:12px; color:var(--accent); letter-spacing:1.5px; text-transform:uppercase; margin-bottom:16px; display:flex; align-items:center; gap:8px;}
+  .eyebrow::before{content:''; width:20px; height:1px; background:var(--accent);}
+  h1{font-size:44px; font-weight:800; line-height:1.12; letter-spacing:-0.02em; margin-bottom:16px;}
+  h1 .grad{background:linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip:text; background-clip:text; color:transparent;}
+  .lead{font-size:16.5px; color:var(--muted); max-width:52ch; margin-bottom:28px;}
+  .chips{display:flex; flex-wrap:wrap; gap:10px; margin-bottom:32px;}
+  .chip{font-family:var(--mono); font-size:12.5px; color:var(--text); background:var(--panel); border:1px solid var(--border); padding:7px 12px; border-radius:20px; display:flex; align-items:center; gap:7px;}
+  .chip b{color:var(--accent);}
+  .hero-actions{display:flex; gap:12px; flex-wrap:wrap;}
+  .btn{font-size:14px; font-weight:600; padding:12px 20px; border-radius:8px; display:inline-flex; align-items:center; gap:8px; border:1px solid var(--border); transition:.15s;}
+  .btn-primary{background:var(--accent); color:#052e2b;}
+  .btn-primary:hover{background:#7ef2df;}
+  .btn-ghost{color:var(--text); background:var(--panel);}
+  .btn-ghost:hover{border-color:var(--muted2);}
+
+  .live-panel{background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:20px; position:relative; overflow:hidden;}
+  .live-panel-head{display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;}
+  .live-title{font-family:var(--mono); font-size:12px; color:var(--muted); text-transform:uppercase; letter-spacing:1px;}
+  .live-dot{display:flex; align-items:center; gap:6px; font-family:var(--mono); font-size:11px; color:var(--ok);}
+  .live-dot .pulse{width:6px; height:6px; border-radius:50%; background:var(--ok); box-shadow:0 0 8px var(--ok); animation:pulse 1.8s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;} 50%{opacity:0.3;}}
+  svg text{font-family:var(--mono);}
+
+  /* SECTIONS */
+  section{padding:64px 0; border-top:1px solid var(--border);}
+  .section-head{margin-bottom:36px;}
+  .section-num{font-family:var(--mono); font-size:12px; color:var(--accent2); letter-spacing:1.5px; margin-bottom:8px;}
+  h2{font-size:28px; font-weight:700; letter-spacing:-0.01em;}
+  .section-sub{color:var(--muted); font-size:15px; margin-top:8px; max-width:60ch;}
+
+  /* PROJECTS */
+  .project{background:var(--bg2); border:1px solid var(--border); border-radius:14px; margin-bottom:24px; overflow:hidden;}
+  .project-head{padding:26px 28px; cursor:pointer; display:flex; justify-content:space-between; align-items:flex-start; gap:20px;}
+  .project-head:hover{background:rgba(255,255,255,0.015);}
+  .project-tag{font-family:var(--mono); font-size:11px; color:var(--accent); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;}
+  .project-title{font-size:19px; font-weight:700; margin-bottom:8px;}
+  .project-desc{color:var(--muted); font-size:14.5px; max-width:62ch;}
+  .project-meta{display:flex; gap:16px; margin-top:14px; flex-wrap:wrap;}
+  .metric{font-family:var(--mono); font-size:12.5px;}
+  .metric b{display:block; font-size:16px; color:var(--text);}
+  .metric.warn b{color:var(--warn);}
+  .metric.ok b{color:var(--ok);}
+  .toggle-icon{font-family:var(--mono); color:var(--muted); font-size:20px; flex-shrink:0; transition:.2s;}
+  .project.open .toggle-icon{transform:rotate(45deg); color:var(--accent);}
+  .project-body{max-height:0; overflow:hidden; transition:max-height .35s ease;}
+  .project.open .project-body{max-height:2400px;}
+  .project-body-inner{padding:0 28px 28px; border-top:1px solid var(--border); margin-top:2px;}
+  .project-body-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:22px;}
+  @media (max-width:800px){ .project-body-grid{grid-template-columns:1fr;} }
+  .tags{display:flex; gap:6px; flex-wrap:wrap; margin-top:16px;}
+  .tag{font-family:var(--mono); font-size:11px; color:var(--muted); background:var(--panel); border:1px solid var(--border); padding:4px 9px; border-radius:5px;}
+  .callout{background:rgba(251,191,36,0.06); border:1px solid rgba(251,191,36,0.25); border-radius:8px; padding:14px 16px; font-size:13.5px; color:#e8dcb8; margin-top:16px;}
+  .callout b{color:var(--warn);}
+  .link-row{margin-top:18px; display:flex; gap:16px;}
+  .link-row a{font-family:var(--mono); font-size:12.5px; color:var(--accent2); border-bottom:1px dotted var(--accent2);}
+
+  table{width:100%; border-collapse:collapse; font-size:12.5px;}
+  th{text-align:left; font-family:var(--mono); font-weight:500; color:var(--muted); text-transform:uppercase; font-size:10.5px; letter-spacing:0.5px; padding:8px; border-bottom:1px solid var(--border);}
+  td{padding:8px; border-bottom:1px solid rgba(255,255,255,0.04); font-family:var(--mono);}
+  tr:hover td{background:rgba(255,255,255,0.02);}
+
+  /* PHILOSOPHY */
+  .philosophy{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:32px;}
+  .philosophy blockquote{font-size:18px; line-height:1.5; color:var(--text); font-weight:500; max-width:64ch;}
+  .philosophy blockquote::before{content:'"'; color:var(--accent);}
+  .philosophy blockquote::after{content:'"'; color:var(--accent);}
+  .philosophy .cite{margin-top:16px; font-family:var(--mono); font-size:12.5px; color:var(--muted);}
+
+  /* ABOUT */
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:40px;}
+  @media (max-width:800px){ .about-grid{grid-template-columns:1fr;} }
+  .about-text p{color:var(--muted); font-size:15px; margin-bottom:14px;}
+  .about-text strong{color:var(--text);}
+  .facts{display:grid; grid-template-columns:1fr 1fr; gap:12px;}
+  .fact{background:var(--bg2); border:1px solid var(--border); border-radius:10px; padding:16px;}
+  .fact-label{font-family:var(--mono); font-size:10.5px; color:var(--muted2); text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;}
+  .fact-val{font-size:14px; font-weight:600;}
+
+  /* CONTACT */
+  .contact-grid{display:flex; gap:14px; flex-wrap:wrap;}
+  .contact-card{flex:1; min-width:200px; background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:20px; transition:.15s;}
+  .contact-card:hover{border-color:var(--accent);}
+  .contact-card .k{font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;}
+  .contact-card .v{font-size:15px; font-weight:600; word-break:break-word;}
+  .placeholder-note{font-size:11px; color:var(--muted2); margin-top:6px; font-family:var(--mono);}
+
+  footer{padding:32px 0; text-align:center; color:var(--muted2); font-size:13px; border-top:1px solid var(--border);}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="logo"><span class="dot"></span>ADI ECKSTEIN</div>
+    <div class="navlinks">
+      <a href="#projects">Projects</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="https://github.com/adieckstein64-max" target="_blank" rel="noopener">GitHub</a>
+      <a class="cta" href="Adi_Eckstein_CV_v2.pdf">Resume ↓</a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Data Analyst / BI · Available for internships</div>
+      <h1>I build models that <span class="grad">tell the truth</span> — even when the truth is R² = -0.04.</h1>
+      <p class="lead">Industrial Engineering & Management student (Data Analytics track), Afeka College. I ship real SQL, real regression, and real scraped data — and I report it honestly when it doesn't beat the baseline.</p>
+      <div class="chips">
+        <div class="chip"><b>30</b> teams, 1 real SQL query</div>
+        <div class="chip"><b>82</b> real player-seasons modeled</div>
+        <div class="chip"><b>0</b> hardcoded "AI" lookup tables</div>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#projects">See the projects →</a>
+        <a class="btn btn-ghost" href="mailto:adieckstein64@gmail.com">Get in touch</a>
+      </div>
+    </div>
+
+    <div class="live-panel">
+      <div class="live-panel-head">
+        <div class="live-title">Project 2 — live query result</div>
+        <div class="live-dot"><span class="pulse"></span>SQL · 30 rows</div>
+      </div>
+      <svg id="heroChart" viewBox="0 0 460 320" style="width:100%; height:auto;"></svg>
+      <div style="display:flex; justify-content:space-between; margin-top:10px; font-family:var(--mono); font-size:11px; color:var(--muted);">
+        <span>payroll (2026-27 committed) →</span>
+        <span>wins / $1M ↑</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<section id="projects">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">01 · PROJECTS</div>
+      <h2>Three real projects. Real data, real limitations stated up front.</h2>
+      <p class="section-sub">Built after retiring an earlier project whose flagship "AI Predicted" feature turned out to be a hardcoded per-player dictionary, not a model. These aren't — and each one pairs the SQL/Python with a UI I designed to make the results scannable, not just a data dump.</p>
+    </div>
+
+    <!-- PROJECT 1 -->
+    <div class="project" id="project1">
+      <div class="project-head" onclick="toggleProject('project1')">
+        <div>
+          <div class="project-tag">Machine Learning · Python</div>
+          <div class="project-title">Playoff Performance Delta Predictor</div>
+          <div class="project-desc">A linear regression that predicts how an NBA player's efficiency (BPM) shifts from regular season to playoffs, using only pre-playoff stats. Time-based train/test split across real seasons.</div>
+          <div class="project-meta">
+            <div class="metric"><b>34 / 48</b>train / test rows</div>
+            <div class="metric warn"><b>MAE 2.49</b>vs baseline 2.42</div>
+            <div class="metric warn"><b>R² -0.04</b>doesn't beat baseline</div>
+          </div>
+        </div>
+        <div class="toggle-icon">+</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <div class="callout"><b>Honest result:</b> this model does not outperform a naive baseline on held-out 2023 data. With 34-48 samples, that's a real small-sample limitation, not a bug — and it's reported here rather than hidden.</div>
+          <div class="project-body-grid">
+            <div>
+              <div style="font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; margin-bottom:8px;">Predicted vs. actual (2023 test set, 48 players)</div>
+              <svg id="p1Scatter" viewBox="0 0 400 300" style="width:100%; height:auto;"></svg>
+            </div>
+            <div>
+              <div style="font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; margin-bottom:8px;">Standardized feature coefficients</div>
+              <svg id="p1Bar" viewBox="0 0 400 300" style="width:100%; height:auto;"></svg>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag">Python</span><span class="tag">pandas</span><span class="tag">NumPy</span><span class="tag">OLS regression</span>
+            <span class="tag">web scraping</span><span class="tag">time-based split</span><span class="tag">UI/UX</span>
+          </div>
+          <p style="color:var(--muted); font-size:13px; margin-top:14px;"><strong style="color:var(--text);">Design decision:</strong> the scatter plot includes a dashed y=x reference line so a viewer can judge model error visually in one glance, without reading MAE off a table first.</p>
+          <div class="link-row">
+            <a href="https://github.com/adieckstein64-max/playoff-delta-predictor" target="_blank" rel="noopener">↗ View source on GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 2 -->
+    <div class="project" id="project2">
+      <div class="project-head" onclick="toggleProject('project2')">
+        <div>
+          <div class="project-tag">SQL · Data Visualization</div>
+          <div class="project-title">NBA Team Cap Efficiency Dashboard</div>
+          <div class="project-desc">SQLite (CTEs, JOINs, RANK/PERCENT_RANK window functions) ranking all 30 NBA teams by wins generated per $1M of committed payroll, from live-scraped data.</div>
+          <div class="project-meta">
+            <div class="metric ok"><b>Detroit</b>most efficient · 0.392 W/$1M</div>
+            <div class="metric"><b>Washington</b>least efficient · 0.091 W/$1M</div>
+            <div class="metric"><b>0.209</b>league average</div>
+          </div>
+        </div>
+        <div class="toggle-icon">+</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <div class="callout"><b>Data limitation, stated directly:</b> Basketball-Reference only publishes forward-looking committed payroll (2026-27+), not a same-season historical figure. This pairs current committed payroll against the most recently completed season's win total — "investment vs. trailing performance," not a strict same-season snapshot.</div>
+          <div style="margin-top:20px;">
+            <div style="font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; margin-bottom:8px;">Top / bottom 5 by wins per $1M committed payroll</div>
+            <table id="p2Table"></table>
+          </div>
+          <div class="tags">
+            <span class="tag">SQL</span><span class="tag">SQLite</span><span class="tag">CTEs</span><span class="tag">window functions</span>
+            <span class="tag">Python</span><span class="tag">SVG viz</span><span class="tag">UI/UX</span>
+          </div>
+          <p style="color:var(--muted); font-size:13px; margin-top:14px;"><strong style="color:var(--text);">Design decision:</strong> sortable columns and a color-coded quadrant legend (green/blue/red/gray) so a recruiter can scan 30 rows and immediately see who's over- and under-paying for wins, without reading every number.</p>
+          <div class="link-row">
+            <a href="https://github.com/adieckstein64-max/nba-cap-efficiency-dashboard" target="_blank" rel="noopener">↗ View source on GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROJECT 3 -->
+    <div class="project" id="project3">
+      <div class="project-head" onclick="toggleProject('project3')">
+        <div>
+          <div class="project-tag">SQL · Python · Data Visualization</div>
+          <div class="project-title">Label Pulse: Innervisions vs. Keinemusik</div>
+          <div class="project-desc">SQLite (CTEs, RANK/SUM window functions) comparing release cadence and roster depth between two electronic music labels I actually play as a DJ — sourced live from Discogs' public catalog.</div>
+          <div class="project-meta">
+            <div class="metric ok"><b>217</b>real releases analyzed</div>
+            <div class="metric"><b>6.7 vs 3.8</b>releases/yr, IV vs KM</div>
+            <div class="metric warn"><b>Rampa</b>only artist on both rosters</div>
+          </div>
+        </div>
+        <div class="toggle-icon">+</div>
+      </div>
+      <div class="project-body">
+        <div class="project-body-inner">
+          <div class="callout"><b>Data limitation, stated directly:</b> Discogs is community-maintained, not the labels' internal logs, and 2026 is a partial year at time of collection — so the visible 2025-2026 dip is a data-cutoff artifact, not a real slowdown, and is flagged as such rather than left to imply a trend.</div>
+          <div class="project-body-grid">
+            <div>
+              <div style="font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; margin-bottom:8px;">Releases per year, 2005–2026</div>
+              <svg id="p3Chart" viewBox="0 0 400 300" style="width:100%; height:auto;"></svg>
+            </div>
+            <div>
+              <div style="font-family:var(--mono); font-size:11px; color:var(--muted); text-transform:uppercase; margin-bottom:8px;">Most prolific artists (RANK() per label)</div>
+              <div id="p3Roster" style="font-family:var(--mono); font-size:11.5px;"></div>
+            </div>
+          </div>
+          <div class="tags">
+            <span class="tag">SQL</span><span class="tag">SQLite</span><span class="tag">CTEs</span><span class="tag">RANK()</span>
+            <span class="tag">Python</span><span class="tag">Discogs API</span><span class="tag">SVG viz</span><span class="tag">UI/UX</span>
+          </div>
+          <p style="color:var(--muted); font-size:13px; margin-top:14px;"><strong style="color:var(--text);">Design decision:</strong> horizontal bar rosters instead of a bar chart with 16 labels crammed on one axis — easier to scan two label rosters side by side without the x-axis becoming illegible.</p>
+          <div class="link-row">
+            <a href="https://github.com/adieckstein64-max/dj-label-pulse" target="_blank" rel="noopener">↗ View source on GitHub</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="philosophy-section">
+  <div class="wrap">
+    <div class="philosophy">
+      <blockquote>I'd rather show you the missed shot on film than a highlight reel that never happened.</blockquote>
+      <div class="cite">— the whole reason this portfolio exists</div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">02 · ABOUT</div>
+      <h2>Off the spreadsheet</h2>
+    </div>
+    <div class="about-grid">
+      <div class="about-text">
+        <p><strong>Industrial Engineering & Management student</strong> (Data Analytics track) at Afeka College of Engineering, going into third year. The dashboards on this site carry the same UI/UX thinking I apply in Figma work elsewhere: dense data made scannable — sortable tables, color-coded quadrants, honest limitations placed where you'd actually read them, not buried in a footnote.</p>
+        <p>Before university: <strong>Special Forces Sergeant</strong> in the Paratroopers Commando Brigade — elite combat unit service, team leadership under real operational pressure. Still on active reserve duty.</p>
+        <p>Outside of data: I play and coach <strong>basketball</strong>, and produce and perform as a <strong>DJ</strong> — both places where preparation matters and the result is either right or it isn't, no partial credit. Project 3 below is where those two worlds actually meet: real label data from the music I play.</p>
+        <p>Every Friday, I volunteer as a <strong>logistics coordinator</strong> for Mechayim LeChayim, organizing food-delivery routes for Holocaust survivors — ongoing since 2019.</p>
+      </div>
+      <div class="facts">
+        <div class="fact"><div class="fact-label">Location</div><div class="fact-val">Raanana, Israel</div></div>
+        <div class="fact"><div class="fact-label">Education</div><div class="fact-val">B.Sc. IE&M, Afeka College</div></div>
+        <div class="fact"><div class="fact-label">Track</div><div class="fact-val">Data Analytics</div></div>
+        <div class="fact"><div class="fact-label">Looking for</div><div class="fact-val">Data Analyst / BI internship</div></div>
+        <div class="fact"><div class="fact-label">Tools</div><div class="fact-val">Python, SQL, Power BI/Tableau, Figma</div></div>
+        <div class="fact"><div class="fact-label">Military</div><div class="fact-val">Paratroopers Commando, reserve</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="section-num">03 · CONTACT</div>
+      <h2>Let's talk</h2>
+    </div>
+    <div class="contact-grid">
+      <a class="contact-card" href="mailto:adieckstein64@gmail.com">
+        <div class="k">Email</div>
+        <div class="v">adieckstein64@gmail.com</div>
+      </a>
+      <a class="contact-card" href="#" id="linkedinLink">
+        <div class="k">LinkedIn</div>
+        <div class="v">Add your profile URL</div>
+        <div class="placeholder-note">placeholder — update before publishing</div>
+      </a>
+      <a class="contact-card" href="https://github.com/adieckstein64-max" target="_blank" rel="noopener" id="githubLink">
+        <div class="k">GitHub</div>
+        <div class="v">github.com/adieckstein64-max</div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Adi Eckstein · Built with real data, real SQL, and no fake AI. · 2026
+</footer>
+
+<script>
+// ---------- shared helpers ----------
+function svgEl(tag, attrs){
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  for(const k in attrs) el.setAttribute(k, attrs[k]);
+  return el;
+}
+
+// ---------- HERO: cap efficiency scatter (real data) ----------
+const CAP_DATA = [
+["DET",60,153163826,0.3917,"#4ade80"],["SAS",62,196130556,0.3161,"#38bdf8"],["OKC",64,214798992,0.2980,"#38bdf8"],
+["BOS",56,201437932,0.2780,"#38bdf8"],["LAL",53,198883338,0.2665,"#38bdf8"],["HOU",52,198097988,0.2625,"#38bdf8"],
+["CHO",44,170472537,0.2581,"#4ade80"],["DEN",54,211739533,0.2550,"#38bdf8"],["NYK",53,217948756,0.2432,"#38bdf8"],
+["LAC",42,174798140,0.2403,"#4ade80"],["TOR",46,198020399,0.2323,"#38bdf8"],["CLE",52,226017942,0.2301,"#38bdf8"],
+["MIN",49,218278034,0.2245,"#38bdf8"],["POR",42,192061727,0.2187,"#4ade80"],["PHI",45,207853950,0.2165,"#38bdf8"],
+["MIA",43,198886535,0.2162,"#38bdf8"],["PHO",45,215794243,0.2085,"#f87171"],["ATL",46,221278253,0.2079,"#f87171"],
+["ORL",45,218125071,0.2063,"#f87171"],["CHI",31,161545080,0.1919,"#9ca3af"],["GSW",37,210390143,0.1759,"#f87171"],
+["MIL",32,193765071,0.1651,"#9ca3af"],["MEM",25,167772446,0.1490,"#9ca3af"],["NOP",26,192090918,0.1354,"#9ca3af"],
+["BRK",20,150836846,0.1326,"#9ca3af"],["DAL",26,197866094,0.1314,"#f87171"],["UTA",22,176915598,0.1244,"#9ca3af"],
+["SAC",22,189346486,0.1162,"#9ca3af"],["IND",19,203715395,0.0933,"#f87171"],["WAS",17,186471414,0.0912,"#9ca3af"]
+];
+const LEAGUE_AVG_PAYROLL = 195483441, LEAGUE_AVG_WPM = 0.2092;
+
+function renderHeroChart(){
+  const svg = document.getElementById('heroChart');
+  const W=460,H=320,pad=44;
+  const xMin=140e6,xMax=235e6,yMin=0.08,yMax=0.40;
+  const x = v => pad + (v-xMin)/(xMax-xMin) * (W-pad*1.6);
+  const y = v => H-pad - (v-yMin)/(yMax-yMin) * (H-pad*1.6);
+
+  svg.appendChild(svgEl('line',{x1:pad,y1:H-pad,x2:W-pad*0.5,y2:H-pad,stroke:'#22252b'}));
+  svg.appendChild(svgEl('line',{x1:pad,y1:pad*0.5,x2:pad,y2:H-pad,stroke:'#22252b'}));
+  svg.appendChild(svgEl('line',{x1:x(LEAGUE_AVG_PAYROLL),y1:pad*0.5,x2:x(LEAGUE_AVG_PAYROLL),y2:H-pad,stroke:'#33363d','stroke-dasharray':'3 4'}));
+  svg.appendChild(svgEl('line',{x1:pad,y1:y(LEAGUE_AVG_WPM),x2:W-pad*0.5,y2:y(LEAGUE_AVG_WPM),stroke:'#33363d','stroke-dasharray':'3 4'}));
+
+  CAP_DATA.forEach(([abbr,wins,payroll,wpm,color],i)=>{
+    const cx=x(payroll), cy=y(wpm);
+    const c = svgEl('circle',{cx,cy,r:0,fill:color,opacity:0.9});
+    svg.appendChild(c);
+    c.animate([{r:0},{r:5}],{duration:400,delay:i*18,fill:'forwards',easing:'ease-out'});
+    setTimeout(()=>c.setAttribute('r',5), i*18+400);
+  });
+  // label the two extremes
+  const det = CAP_DATA[0], was = CAP_DATA[CAP_DATA.length-1];
+  const lbl = (d,dy)=>{
+    const t = svgEl('text',{x:x(d[2]),y:y(d[3])+dy,fill:'#8b8f98','font-size':'9','text-anchor':'middle'});
+    t.textContent = d[0]; svg.appendChild(t);
+  };
+  lbl(det,-10); lbl(was,16);
+}
+
+// ---------- PROJECT 1 charts ----------
+const P1_POINTS = [
+[-0.3,0.38],[9.4,-0.26],[1.0,-1.43],[-2.2,-0.16],[4.4,1.82],[-1.8,-0.96],[-1.2,0.24],[0.7,-0.55],[2.5,-0.66],
+[-2.2,-1.59],[0.9,-0.28],[3.7,0.08],[-0.2,-4.19],[2.0,-3.01],[-7.3,-4.36],[1.6,0.75],[0.4,-1.53],[2.3,1.28],
+[0.0,-0.87],[-4.5,-1.74],[-0.4,-3.24],[-2.1,-1.97],[-1.3,-2.55],[-2.2,0.79],[3.5,1.05],[-2.3,-0.48],[-4.4,-0.29],
+[-0.3,-0.81],[-6.5,-3.12],[1.6,0.68],[-1.2,-0.30],[1.0,1.71],[1.5,-3.85],[-1.0,-5.67],[-0.5,-1.63],[-0.6,-1.94],
+[-0.6,-0.70],[-2.7,-0.75],[6.5,-1.41],[-2.9,-0.56],[7.7,-2.06],[-4.4,-1.52],[-2.4,-0.55],[1.6,-1.61],[-0.9,-1.28],
+[3.5,1.68],[-2.5,-6.32],[2.8,2.47]
+];
+function renderP1Scatter(){
+  const svg = document.getElementById('p1Scatter');
+  const W=400,H=300,pad=40;
+  const xMin=-8,xMax=10,yMin=-7,yMax=3;
+  const x=v=>pad+(v-xMin)/(xMax-xMin)*(W-pad*1.5);
+  const y=v=>H-pad-(v-yMin)/(yMax-yMin)*(H-pad*1.5);
+  svg.appendChild(svgEl('line',{x1:pad,y1:H-pad,x2:W-pad*0.5,y2:H-pad,stroke:'#22252b'}));
+  svg.appendChild(svgEl('line',{x1:pad,y1:pad*0.5,x2:pad,y2:H-pad,stroke:'#22252b'}));
+  // y=x perfect-prediction reference line
+  svg.appendChild(svgEl('line',{x1:x(xMin),y1:y(xMin),x2:x(xMax<yMax?xMax:yMax),y2:y(xMax<yMax?xMax:yMax),stroke:'#38bdf8','stroke-dasharray':'3 4',opacity:0.5}));
+  P1_POINTS.forEach(([actual,pred])=>{
+    svg.appendChild(svgEl('circle',{cx:x(actual),cy:y(pred),r:3.5,fill:'#5eead4',opacity:0.75}));
+  });
+  const lx = svgEl('text',{x:W/2,y:H-8,fill:'#8b8f98','font-size':'10','text-anchor':'middle'}); lx.textContent='actual BPM delta';
+  svg.appendChild(lx);
+  const ly = svgEl('text',{x:14,y:H/2,fill:'#8b8f98','font-size':'10','text-anchor':'middle',transform:`rotate(-90 14 ${H/2})`}); ly.textContent='predicted BPM delta';
+  svg.appendChild(ly);
+}
+const P1_COEF = [["TS%",-1.48],["USG%",-1.19],["age",-0.83],["TOV%",-0.62],["WS/48",0.61],["AST%",0.44],["BPM",-0.36],["3PAr",-0.29]];
+function renderP1Bar(){
+  const svg = document.getElementById('p1Bar');
+  const W=400,H=300,pad=70;
+  const maxAbs = 1.6;
+  const barH = (H-pad*0.6)/P1_COEF.length - 6;
+  const midX = pad;
+  const scale = (W-pad-20)/2/maxAbs;
+  P1_COEF.forEach(([name,val],i)=>{
+    const yTop = 16 + i*(barH+6);
+    const w = Math.abs(val)*scale;
+    const bx = val<0 ? midX-w : midX;
+    svg.appendChild(svgEl('rect',{x:bx,y:yTop,width:w,height:barH,fill:val<0?'#f87171':'#4ade80',opacity:0.85,rx:2}));
+    const lbl = svgEl('text',{x:midX-pad+6,y:yTop+barH/2+4,fill:'#c8cad0','font-size':'11'}); lbl.textContent=name;
+    svg.appendChild(lbl);
+    const valTxt = svgEl('text',{x: val<0? bx-6 : bx+w+6, y:yTop+barH/2+4, fill:'#8b8f98','font-size':'10','text-anchor': val<0?'end':'start'});
+    valTxt.textContent = val.toFixed(2);
+    svg.appendChild(valTxt);
+  });
+  svg.appendChild(svgEl('line',{x1:midX,y1:10,x2:midX,y2:H-20,stroke:'#33363d'}));
+}
+
+// ---------- PROJECT 2 table ----------
+function renderP2Table(){
+  const t = document.getElementById('p2Table');
+  const top5 = CAP_DATA.slice(0,5);
+  const bottom5 = CAP_DATA.slice(-5).reverse();
+  let html = '<thead><tr><th>Team</th><th>Wins</th><th>Payroll</th><th>Wins / $1M</th></tr></thead><tbody>';
+  const row = (d,cls) => `<tr><td>${d[0]}</td><td>${d[1]}</td><td>$${(d[2]/1e6).toFixed(1)}M</td><td style="color:${cls}">${d[3].toFixed(4)}</td></tr>`;
+  top5.forEach(d=> html += row(d,'#4ade80'));
+  html += `<tr><td colspan="4" style="text-align:center; color:#5c6069; font-size:10px; padding:4px;">···</td></tr>`;
+  bottom5.forEach(d=> html += row(d,'#f87171'));
+  html += '</tbody>';
+  t.innerHTML = html;
+}
+
+// ---------- PROJECT 3: Label Pulse ----------
+const P3_CADENCE = {
+  Innervisions: [4,6,4,7,9,8,7,8,9,12,9,7,8,9,9,7,4,4,8,6,2,1], // 2005-2026
+  Keinemusik:   [null,null,null,null,4,4,4,4,4,5,5,4,5,4,4,4,3,4,3,4,3,1] // 2005-2026, null before 2009
+};
+const P3_YEARS = Array.from({length:22}, (_,i)=>2005+i);
+function renderP3Chart(){
+  const svg = document.getElementById('p3Chart');
+  const W=400,H=300,pad=36;
+  const xMin=2005,xMax=2026,yMin=0,yMax=13;
+  const x=v=>pad+(v-xMin)/(xMax-xMin)*(W-pad*1.4);
+  const y=v=>H-pad-(v-yMin)/(yMax-yMin)*(H-pad*1.6);
+  svg.appendChild(svgEl('line',{x1:pad,y1:H-pad,x2:W-pad*0.4,y2:H-pad,stroke:'#22252b'}));
+  svg.appendChild(svgEl('line',{x1:pad,y1:pad*0.4,x2:pad,y2:H-pad,stroke:'#22252b'}));
+  [2005,2010,2015,2020,2025].forEach(yr=>{
+    const t=svgEl('text',{x:x(yr),y:H-pad+14,fill:'#8b8f98','font-size':'9','text-anchor':'middle'}); t.textContent=yr; svg.appendChild(t);
+  });
+  const drawLine = (arr,color)=>{
+    let d='';
+    P3_YEARS.forEach((yr,i)=>{
+      const v = arr[i];
+      if(v==null) return;
+      d += (d===''?'M':'L') + x(yr) + ',' + y(v) + ' ';
+    });
+    svg.appendChild(svgEl('path',{d:d.trim(),fill:'none',stroke:color,'stroke-width':2}));
+    P3_YEARS.forEach((yr,i)=>{
+      const v = arr[i];
+      if(v==null) return;
+      svg.appendChild(svgEl('circle',{cx:x(yr),cy:y(v),r:2.3,fill:color}));
+    });
+  };
+  drawLine(P3_CADENCE.Innervisions,'#38bdf8');
+  drawLine(P3_CADENCE.Keinemusik,'#fbbf24');
+  const leg1=svgEl('text',{x:pad,y:20,fill:'#38bdf8','font-size':'10'}); leg1.textContent='● Innervisions'; svg.appendChild(leg1);
+  const leg2=svgEl('text',{x:pad+90,y:20,fill:'#fbbf24','font-size':'10'}); leg2.textContent='● Keinemusik'; svg.appendChild(leg2);
+}
+const P3_ROSTER = {
+  Innervisions: [["Âme",11],["Trikk",6],["Frankey & Sandrino",5],["Marcus Worgull",5],["Tokyo Black Star",5],["Toto Chiavetta",5]],
+  Keinemusik: [["Rampa",9],["Adam Port",8],["&ME",7],["David Mayer",6],["Keinemusik",4],["&Me",3]]
+};
+function renderP3Roster(){
+  const el = document.getElementById('p3Roster');
+  const maxCount = 11;
+  const bar = (name,count,color) => `
+    <div style="display:flex; align-items:center; gap:8px; margin-bottom:5px;">
+      <div style="width:110px; color:#8b8f98; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">${name}</div>
+      <div style="flex:1; background:#111318; border-radius:3px; height:12px; overflow:hidden;">
+        <div style="width:${(count/maxCount*100).toFixed(0)}%; height:100%; background:${color};"></div>
+      </div>
+      <div style="width:18px; text-align:right; color:#8b8f98;">${count}</div>
+    </div>`;
+  let html = '<div style="color:#5eead4; text-transform:uppercase; font-size:10px; margin-bottom:6px;">Innervisions</div>';
+  P3_ROSTER.Innervisions.forEach(([n,c])=> html += bar(n,c,'#38bdf8'));
+  html += '<div style="color:#fbbf24; text-transform:uppercase; font-size:10px; margin:12px 0 6px;">Keinemusik</div>';
+  P3_ROSTER.Keinemusik.forEach(([n,c])=> html += bar(n,c,'#fbbf24'));
+  el.innerHTML = html;
+}
+
+// ---------- accordion ----------
+function toggleProject(id){
+  const el = document.getElementById(id);
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.project').forEach(p=>p.classList.remove('open'));
+  if(!wasOpen) el.classList.add('open');
+}
+
+// ---------- init ----------
+renderHeroChart();
+renderP1Scatter();
+renderP1Bar();
+renderP2Table();
+renderP3Chart();
+renderP3Roster();
+</script>
+</body>
+</html>
